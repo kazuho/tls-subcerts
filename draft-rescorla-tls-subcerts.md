@@ -87,6 +87,16 @@ of the delegation to speak for names that the CA has authorized.  For clarity,
 we will refer to the certificate issued by the CA as a "certificate" and the one
 issued by the operator as a "Delegated credential".
 
+Delegated credential also reduces the risk of private key exposure.
+
+It is often expected for a TLS deployment to share a single public key among the servers that serve under a single identity (e.g. server name). For example, Using Raw Public Keys in TLS/DTLS {{RFC 7250}} and Public Key Pinning Extension for HTTP {{RFC 7469}} rely on such form of deployment.
+
+The fact means that a server administrator needs access to the private key for distributing the key among the servers, even though having such access is considered something that should better be avoided. Access is required even if only one server is involved, since there is a need to create a backup of the private key.
+
+With Delegated credential, since any number of credentials can be used to sign the handshakes, each server can use its own key pair. Instead of transmitting private keys, the public keys generated on each server will be transmitted to a location where the private key of the certificate is stored, and will be used to create Delegated credentials for each of the servers.
+
+The fact that there is no need to transmit private keys leads to improved security, since it becomes feasible to keep the private keys within secure devices attached to each server.
+
 # Solution Overview
 
 A Delegated credential is a digitally signed data structure with the following
